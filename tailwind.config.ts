@@ -11,6 +11,12 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        imediusSky: "oklch(var(--imediusSky))",
+        imediusSkyLight: "oklch(var(--imediusSkyLight))",
+        imediusPurple: "oklch(var(--imediusPurple))",
+        imediusPurpleLight: "oklch(var(--imediusPurpleLight))",
+        imediusYellow: "oklch(var(--imediusYellow))",
+        imediusYellowLight: "oklch(var(--imediusYellowLight))",
       },
     },
   },

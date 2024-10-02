@@ -148,7 +148,7 @@ export default function Navigation() {
             {menu.items.map((item, itemIndex) => 
               item.visible.includes(role) && (
                 <li key={itemIndex}>
-                  <Link href={item.href} className="flex items-center justify-center lg:justify-start gap-4 py-2 text-gray-500">
+                  <Link href={item.href} className="flex items-center justify-center lg:justify-start gap-4 py-2 md:px-2 rounded-md hover:bg-imediusSkyLight text-gray-500">
                     {item.icon && <item.icon className="w-5 h-5" />}
                     {item.label && <span className="hidden lg:block">{item.label}</span>}
                   </Link>

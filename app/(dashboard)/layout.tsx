@@ -25,7 +25,7 @@ export default function DashboardLayout({
         </Link>
         <Navigation />
       </aside>
-      <main className="w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] overflow-scroll dashboard-bg">
+      <main className="flex flex-col w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] overflow-scroll dashboard-bg">
         <Menu />
         {children}
       </main>

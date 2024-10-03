@@ -97,7 +97,7 @@ export default function TeacherListPage() {
   return (
     <div className='flex flex-col gap-4 flex-1 m-4 mt-0 p-4 rounded-xl bg-white'>
       <header className='flex items-center justify-between'>
-        <h2 className='hidden md:block text-lg font-semibold'>Teachers</h2>
+        <h2 className='hidden md:block text-lg font-semibold'>All Teachers</h2>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center self-end gap-4">
@@ -109,10 +109,12 @@ export default function TeacherListPage() {
               <FaSortAmountDown size={14} />
               <span className="sr-only">Sort button</span>
             </button>
-            <button className='flex items-center justify-center h-8 w-8 p-2 rounded-full bg-imediusYellow' type='button'>
-              <IoIosAdd size={14} />
-              <span className="sr-only">Add Teacher button</span>
-            </button>
+            {role === 'admin' && (
+              <button className='flex items-center justify-center h-8 w-8 p-2 rounded-full bg-imediusYellow' type='button'>
+                <IoIosAdd size={14} />
+                <span className="sr-only">Add Teacher button</span>
+              </button>
+            )}
           </div>
         </div>
       </header>

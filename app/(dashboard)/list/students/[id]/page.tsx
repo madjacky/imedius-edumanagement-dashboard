@@ -43,24 +43,24 @@ export default function SingleStudentPage() {
               </div>
             </article>
             <article className='flex gap-4 w-full md:w-[48%] xl:w-[45%] 2xl:w-[48%] p-4 bg-white rounded-xl'>
-              <Image className='h-6 w-6' src='/images/singleBranch.png' width={24} height={24} alt='Branch' />
+              <Image className='h-6 w-6' src='/images/singleBranch.png' width={24} height={24} alt='Grade' />
               <div className="">
-                <h3 className='text-xl font-semibold'>2</h3>
-                <p className='text-sm text-gray-400'>Branches</p>
+                <h3 className='text-xl font-semibold'>6th</h3>
+                <p className='text-sm text-gray-400'>Grade</p>
               </div>
             </article>
             <article className='flex gap-4 w-full md:w-[48%] xl:w-[45%] 2xl:w-[48%] p-4 bg-white rounded-xl'>
               <Image className='h-6 w-6' src='/images/singleLesson.png' width={24} height={24} alt='Lessons' />
               <div className="">
-                <h3 className='text-xl font-semibold'>6</h3>
+                <h3 className='text-xl font-semibold'>18</h3>
                 <p className='text-sm text-gray-400'>Lessons</p>
               </div>
             </article>
             <article className='flex gap-4 w-full md:w-[48%] xl:w-[45%] 2xl:w-[48%] p-4 bg-white rounded-xl'>
-              <Image className='h-6 w-6' src='/images/singleClass.png' width={24} height={24} alt='Classes' />
+              <Image className='h-6 w-6' src='/images/singleClass.png' width={24} height={24} alt='Class' />
               <div className="">
-                <h3 className='text-xl font-semibold'>6</h3>
-                <p className='text-sm text-gray-400'>Classes</p>
+                <h3 className='text-xl font-semibold'>6<span className='uppercase'>a</span></h3>
+                <p className='text-sm text-gray-400'>Class</p>
               </div>
             </article>
           </div>

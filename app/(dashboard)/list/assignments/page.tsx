@@ -3,12 +3,9 @@ import { role, assignmentsData } from '@/lib/data';
 import TableSearch from '@/components/TableSearch'
 import { VscSettings } from "react-icons/vsc";
 import { FaSortAmountDown } from "react-icons/fa";
-import { IoIosAdd } from "react-icons/io";
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
-import Link from 'next/link';
-import { FaEdit } from "react-icons/fa";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import FormModal from '@/components/FormModal';
 
 type Assignment = {
   id: number;
@@ -16,7 +13,7 @@ type Assignment = {
   class: string;
   teacher: string;
   dueDate: string;
-}
+};
 
 const columns = [
   {
@@ -38,8 +35,8 @@ const columns = [
     className: "hidden md:table-cell",
   },
   {
-    header: "Actions", 
-    accessor: 'actions', 
+    header: "Actions",
+    accessor: "action",
   },
 ]
 
@@ -51,17 +48,13 @@ export default function AssignmentListPage() {
         <td>{item.class}</td>
         <td className='hidden md:table-cell'>{item.teacher}</td>
         <td className='hidden md:table-cell'>{item.dueDate}</td>
-        <td className=''>
+        <td>
           <div className="flex items-center gap-2">
-            <Link href={`/list/students/${item.id}`} className='flex items-center justify-center h-7 w-7 rounded-full bg-imediusSky'>
-              <FaEdit  className='text-white' size={16} />
-              <span className='sr-only'>Edit Selected Assignment</span>
-            </Link>
-            {role === 'admin' && (
-              <button type='button' className='flex items-center justify-center h-7 w-7 rounded-full bg-imediusPurple'>
-                <RiDeleteBin6Line className='text-white' size={16} />
-                <span className='sr-only'>Delete Selected Assignment from the list</span>
-              </button>
+            {role === "admin" || role === "teacher" && (
+              <>
+                <FormModal table="assignment" type="update" data={item} />
+                <FormModal table="assignment" type="delete" id={item.id} />
+              </>
             )}
           </div>
         </td>
@@ -83,12 +76,7 @@ export default function AssignmentListPage() {
               <FaSortAmountDown size={14} />
               <span className="sr-only">Sort button</span>
             </button>
-            {role === 'admin' && (
-              <button className='flex items-center justify-center h-8 w-8 p-2 rounded-full bg-imediusYellow' type='button'>
-                <IoIosAdd size={14} />
-                <span className="sr-only">Add Assignments button</span>
-              </button>
-            )}
+            {role === "admin" || role === "teacher" && <FormModal table="assignment" type="create" />}
           </div>
         </div>
       </header>

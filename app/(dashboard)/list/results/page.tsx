@@ -3,12 +3,9 @@ import { role, resultsData } from '@/lib/data';
 import TableSearch from '@/components/TableSearch'
 import { VscSettings } from "react-icons/vsc";
 import { FaSortAmountDown } from "react-icons/fa";
-import { IoIosAdd } from "react-icons/io";
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
-import Link from 'next/link';
-import { FaEdit } from "react-icons/fa";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import FormModal from '@/components/FormModal';
 
 type Result = {
   id: number;
@@ -68,15 +65,11 @@ export default function ResultListPage() {
         <td className='hidden md:table-cell'>{item.date}</td>
         <td className=''>
           <div className="flex items-center gap-2">
-            <Link href={`/list/students/${item.id}`} className='flex items-center justify-center h-7 w-7 rounded-full bg-imediusSky'>
-              <FaEdit  className='text-white' size={16} />
-              <span className='sr-only'>Edit Selected Result</span>
-            </Link>
-            {role === 'admin' && (
-              <button type='button' className='flex items-center justify-center h-7 w-7 rounded-full bg-imediusPurple'>
-                <RiDeleteBin6Line className='text-white' size={16} />
-                <span className='sr-only'>Delete Selected Result from the list</span>
-              </button>
+            {role === 'admin' || role === 'teacher' && (
+              <>
+                <FormModal table="result" type="update" data={item} />
+                <FormModal table="result" type="delete" id={item.id} />
+              </>
             )}
           </div>
         </td>
@@ -98,11 +91,8 @@ export default function ResultListPage() {
               <FaSortAmountDown size={14} />
               <span className="sr-only">Sort button</span>
             </button>
-            {role === 'admin' && (
-              <button className='flex items-center justify-center h-8 w-8 p-2 rounded-full bg-imediusYellow' type='button'>
-                <IoIosAdd size={14} />
-                <span className="sr-only">Add Result button</span>
-              </button>
+            {role === 'admin' || role === 'teacher' && (
+              <FormModal table="result" type="create" />
             )}
           </div>
         </div>

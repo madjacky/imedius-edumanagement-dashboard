@@ -3,12 +3,9 @@ import { role, classesData } from '@/lib/data';
 import TableSearch from '@/components/TableSearch'
 import { VscSettings } from "react-icons/vsc";
 import { FaSortAmountDown } from "react-icons/fa";
-import { IoIosAdd } from "react-icons/io";
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
-import Link from 'next/link';
-import { FaEdit } from "react-icons/fa";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import FormModal from '@/components/FormModal';
 
 type Class = {
   id: number;
@@ -54,15 +51,11 @@ export default function ClassListPage() {
         <td className='hidden md:table-cell'>{item.supervisor}</td>
         <td className=''>
           <div className="flex items-center gap-2">
-            <Link href={`/list/students/${item.id}`} className='flex items-center justify-center h-7 w-7 rounded-full bg-imediusSky'>
-              <FaEdit className='text-white' size={16} />
-              <span className='sr-only'>Edit Selected Class</span>
-            </Link>
             {role === 'admin' && (
-              <button type='button' className='flex items-center justify-center h-7 w-7 rounded-full bg-imediusPurple'>
-                <RiDeleteBin6Line className='text-white' size={16} />
-                <span className='sr-only'>Delete Selected Class from the list</span>
-              </button>
+              <>
+                <FormModal table="class" type="update" data={item} />
+                <FormModal table="class" type="delete" id={item.id} />
+              </>
             )}
           </div>
         </td>
@@ -85,10 +78,7 @@ export default function ClassListPage() {
               <span className="sr-only">Sort button</span>
             </button>
             {role === 'admin' && (
-              <button className='flex items-center justify-center h-8 w-8 p-2 rounded-full bg-imediusYellow' type='button'>
-                <IoIosAdd size={14} />
-                <span className="sr-only">Add Class button</span>
-              </button>
+              <FormModal table="class" type="create" />
             )}
           </div>
         </div>

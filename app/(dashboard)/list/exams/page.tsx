@@ -50,12 +50,12 @@ export default function ExamListPage() {
         <td className='hidden md:table-cell'>{item.date}</td>
         <td className=''>
           <div className="flex items-center gap-2">
-            {role === "admin" || role === "teacher" && (
-              <>
-                <FormModal table="exam" type="update" data={item} />
-                <FormModal table="exam" type="delete" id={item.id} />
-              </>
-            )}
+          {(role === "admin" || role === "teacher") && (
+            <>
+              <FormModal table="exam" type="update" data={item} />
+              <FormModal table="exam" type="delete" id={item.id} />
+            </>
+          )}
           </div>
         </td>
       </tr>
@@ -76,7 +76,7 @@ export default function ExamListPage() {
               <FaSortAmountDown size={14} />
               <span className="sr-only">Sort button</span>
             </button>
-            {role === "admin" || role === "teacher" && <FormModal table="exam" type="create" />}
+            {(role === "admin") || (role === "teacher" && <FormModal table="exam" type="create" />)}
           </div>
         </div>
       </header>

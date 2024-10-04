@@ -5,6 +5,8 @@ import BigCalendar from '@/components/BigCalendar';
 import Announcement from '@/components/Announcement';
 import Link from 'next/link';
 import Performance from '@/components/Performance';
+import { role } from '@/lib/data';
+import FormModal from '@/components/FormModal';
 
 export default function SingleTeacherPage() {
   return (
@@ -16,7 +18,26 @@ export default function SingleTeacherPage() {
               <Image className='h-36 circle-avatar w-36' src='/images/imeda.jpg' width={144} height={144} alt='Imeda Iakovenko' />
             </div>
             <div className="flex flex-col justify-between gap-4 w-2/3">
-              <h2 className='text-xl font-semibold'>Imeda Iakovenko</h2>
+              <div className="flex items-center gap-2">
+                <h2 className='text-xl font-semibold'>Imeda Iakovenko</h2>
+                {role === "admin" && <FormModal
+                  table="teacher"
+                  type="update"
+                  data={{
+                    id: 1,
+                    username: "imedius",
+                    email: "imedaiakovenko@gmail.com",
+                    password: "password",
+                    firstName: "Imeda",
+                    lastName: "Iakovenko",
+                    phone: "+995 557 45 45 53",
+                    address: "Takaishvili St, Batumi, Georgia",
+                    dateOfBirth: "1989-03-11",
+                    sex: "male",
+                    img: "/images/imeda.jpg",
+                  }}
+                />}
+              </div>
               <p  className='text-sm text-gray-500'>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
               <div className="flex flex-wrap items-center justify-between gap-2 font-medium text-xs">
                 <div className="flex 2xl:flex-shrink-0 items-center gap-2 w-full md:w-1/3 lg:w-full 2xl:w-[40%]">

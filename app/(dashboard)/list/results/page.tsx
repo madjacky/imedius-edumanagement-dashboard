@@ -65,7 +65,7 @@ export default function ResultListPage() {
         <td className='hidden md:table-cell'>{item.date}</td>
         <td className=''>
           <div className="flex items-center gap-2">
-            {role === 'admin' || role === 'teacher' && (
+            {(role === "admin" || role === "teacher") && (
               <>
                 <FormModal table="result" type="update" data={item} />
                 <FormModal table="result" type="delete" id={item.id} />
@@ -91,9 +91,7 @@ export default function ResultListPage() {
               <FaSortAmountDown size={14} />
               <span className="sr-only">Sort button</span>
             </button>
-            {role === 'admin' || role === 'teacher' && (
-              <FormModal table="result" type="create" />
-            )}
+            {(role === "admin") || (role === "teacher" && <FormModal table="result" type="create" />)}
           </div>
         </div>
       </header>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { role, eventsData } from '@/lib/data';
+import { role } from '@/lib/data';
 import TableSearch from '@/components/TableSearch'
 import { VscSettings } from "react-icons/vsc";
 import { FaSortAmountDown } from "react-icons/fa";
@@ -7,14 +7,11 @@ import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
 import FormModal from '@/components/FormModal';
 
-type Event = {
-  id: number;
-  title: string;
-  class: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-}
+import prisma from "@/lib/prisma";
+import { ITEM_PER_PAGE } from "@/lib/settings";
+import { Class, Event, Prisma } from "@prisma/client";
+
+type EventList = Event & { class: Class };
 
 const columns = [
   {
@@ -46,15 +43,32 @@ const columns = [
   },
 ]
 
-export default function EventListPage() {
-  const renderRow = (item: Event) => {
+export default async function EventListPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) {
+
+  const renderRow = (item: EventList) => {
     return (
       <tr key={item.id} className='border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-imediusPurpleLight'>
         <td className='flex items-center gap-4 p-4'>{item.title}</td>
-        <td>{item.class}</td>
-        <td className='hidden md:table-cell'>{item.date}</td>
-        <td className='hidden md:table-cell'>{item.startTime}</td>
-        <td className='hidden md:table-cell'>{item.endTime}</td>
+        <td>{item.class?.name || "-"}</td>
+        <td className='hidden md:table-cell'>{new Intl.DateTimeFormat("en-US").format(item.startTime)}</td>
+        <td className='hidden md:table-cell'>
+          {item.startTime.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })}
+        </td>
+        <td className='hidden md:table-cell'>
+          {item.endTime.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })}
+        </td>
         <td className=''>
           <div className="flex items-center gap-2">
             {role === 'admin' && (
@@ -68,6 +82,37 @@ export default function EventListPage() {
       </tr>
     )
   }
+
+  const { page, ...queryParams } = searchParams;
+  const p = page ? parseInt(page) : 1;
+  const query: Prisma.EventWhereInput = {};
+
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "search":
+            query.title = { contains: value, mode: "insensitive" };
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  const [data, count] = await prisma.$transaction([
+    prisma.event.findMany({
+      where: query,
+      include: {
+        class: true,
+      },
+      take: ITEM_PER_PAGE,
+      skip: ITEM_PER_PAGE * (p - 1),
+    }),
+    prisma.event.count({ where: query }),
+  ]);
+
   return (
     <div className='flex flex-col gap-4 flex-1 m-4 mt-0 p-4 rounded-xl bg-white'>
       <header className='flex items-center justify-between'>
@@ -89,8 +134,8 @@ export default function EventListPage() {
           </div>
         </div>
       </header>
-      <Table columns={columns} renderRow={renderRow} data={eventsData} />
-      <Pagination />
+      <Table columns={columns} renderRow={renderRow} data={data} />
+      <Pagination page={p} count={count} />
     </div>
   )
 }

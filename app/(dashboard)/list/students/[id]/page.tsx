@@ -99,7 +99,7 @@ export default function SingleStudentPage() {
           </header>
           <ul className='flex flex-wrap gap-4 text-xs text-gray-500'>
             <li><Link className='block p-3 rounded-md bg-imediusSkyLight' href='/'>Student&apos;s Lessons</Link></li>
-            <li><Link className='block p-3 rounded-md bg-imediusPurpleLight' href='/'>Student&apos;s Teachers</Link></li>
+            <li><Link className='block p-3 rounded-md bg-imediusPurpleLight' href={`/list/teachers?classesId=s{2}`}>Student&apos;s Teachers</Link></li>
             <li><Link className='block p-3 rounded-md bg-pink-50' href='/'>Students&apos;s Exams</Link></li>
             <li><Link className='block p-3 rounded-md bg-cyan-50' href='/'>Student&apos;s Assignments</Link></li>
             <li><Link className='block p-3 rounded-md bg-indigo-50' href='/'>Student&apos;s Results</Link></li>

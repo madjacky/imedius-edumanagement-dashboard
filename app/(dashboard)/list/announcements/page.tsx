@@ -1,14 +1,15 @@
 import React from 'react'
-import { role } from '@/lib/data';
 import TableSearch from '@/components/TableSearch'
 import { VscSettings } from "react-icons/vsc";
 import { FaSortAmountDown } from "react-icons/fa";
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
 import FormModal from '@/components/FormModal';
+
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Announcement, Class, Prisma } from "@prisma/client";
+import { role, currentUserId } from '@/lib/utils';
 
 type AnnouncementList = Announcement & { class: Class };
 
@@ -26,10 +27,14 @@ const columns = [
     accessor: 'teacher',
     className: "hidden md:table-cell",
   },
-  {
-    header: "Actions", 
-    accessor: 'actions', 
-  },
+  ...(role === "admin"
+    ? [
+        {
+          header: "Actions",
+          accessor: "action",
+        },
+      ]
+    : [])
 ]
 
 export default async function AnnouncementListPage({
@@ -78,6 +83,18 @@ export default async function AnnouncementListPage({
     }
   }
 
+  const roleConditions = {
+    teacher: { lessons: { some: { teacherId: currentUserId! } } },
+    student: { students: { some: { id: currentUserId! } } },
+    parent: { students: { some: { parentId: currentUserId! } } },
+  };
+
+  query.OR = [
+    { classId: null },
+    {
+      class: roleConditions[role as keyof typeof roleConditions] || {},
+    },
+  ];
 
   const [data, count] = await prisma.$transaction([
     prisma.announcement.findMany({

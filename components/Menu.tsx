@@ -1,11 +1,14 @@
 import React from 'react'
+import { currentUser } from "@clerk/nextjs/server";
+import { UserButton } from '@clerk/nextjs';
 import { CiSearch } from "react-icons/ci";
 import { AiOutlineMessage } from "react-icons/ai";
 import { TfiAnnouncement } from "react-icons/tfi";
 import Link from 'next/link';
-import Image from 'next/image';
+// import Image from 'next/image';
 
-export default function Menu() {
+export default async function Menu() {
+  const user = await currentUser();
   return (
     <div className='flex items-center justify-between p-4'>
       <label htmlFor="" className='hidden md:flex items-center gap-2 px-2 ring-[1.5px] ring-gray-300 rounded-full text-xs'>
@@ -23,11 +26,12 @@ export default function Menu() {
         <div className="flex gap-6">
           <div className="flex flex-col">
             <h3 className='text-xs font-medium leading-3'>Imeda Iakovenko</h3>
-            <span className='text-[.625rem] text-right text-gray-500'>Admin</span>
+            <span className='text-[.625rem] text-right text-gray-500'>{user?.publicMetadata?.role as string}</span>
           </div>
-          <Link href='/' className="flex items-center justify-center w-9 h-9 rounded-full bg-white">
+          {/* <Link href='/' className="flex items-center justify-center w-9 h-9 rounded-full bg-white">
             <Image className='circle-avatar object-cover overflow-clip' src='/images/imeda.jpg' width={36} height={36} alt='Imeda Iakovenko' />
-          </Link>
+          </Link> */}
+          <UserButton />
         </div>
       </div>
     </div>

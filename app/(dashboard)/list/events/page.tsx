@@ -1,5 +1,5 @@
 import React from 'react'
-import { role } from '@/lib/data';
+import { role, currentUserId } from '@/lib/utils';
 import TableSearch from '@/components/TableSearch'
 import { VscSettings } from "react-icons/vsc";
 import { FaSortAmountDown } from "react-icons/fa";
@@ -37,10 +37,14 @@ const columns = [
     accessor: 'endTime',
     className: "hidden md:table-cell",
   },
-  {
-    header: "Actions", 
-    accessor: 'actions', 
-  },
+  ...(role === "admin"
+    ? [
+        {
+          header: "Actions",
+          accessor: "action",
+        },
+      ]
+    : []),
 ]
 
 export default async function EventListPage({
@@ -100,6 +104,19 @@ export default async function EventListPage({
       }
     }
   }
+
+  const roleConditions = {
+    teacher: { lessons: { some: { teacherId: currentUserId! } } },
+    student: { students: { some: { id: currentUserId! } } },
+    parent: { students: { some: { parentId: currentUserId! } } },
+  };
+
+  query.OR = [
+    { classId: null },
+    {
+      class: roleConditions[role as keyof typeof roleConditions] || {},
+    },
+  ];
 
   const [data, count] = await prisma.$transaction([
     prisma.event.findMany({

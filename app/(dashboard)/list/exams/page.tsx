@@ -1,5 +1,5 @@
 import React from 'react'
-import { role } from '@/lib/data';
+import { role, currentUserId } from '@/lib/utils';
 import TableSearch from '@/components/TableSearch'
 import { VscSettings } from "react-icons/vsc";
 import { FaSortAmountDown } from "react-icons/fa";
@@ -38,10 +38,14 @@ const columns = [
     accessor: 'date',
     className: "hidden md:table-cell",
   },
-  {
-    header: "Actions", 
-    accessor: 'actions', 
-  },
+  ...(role === "admin" || role === "teacher"
+    ? [
+        {
+          header: "Actions",
+          accessor: "action",
+        },
+      ]
+    : []),
 ]
 
 export default async function ExamListPage({
@@ -96,6 +100,35 @@ export default async function ExamListPage({
         }
       }
     }
+  }
+
+  switch (role) {
+    case "admin":
+      break;
+    case "teacher":
+      query.lesson.teacherId = currentUserId!;
+      break;
+    case "student":
+      query.lesson.class = {
+        students: {
+          some: {
+            id: currentUserId!,
+          },
+        },
+      };
+      break;
+    case "parent":
+      query.lesson.class = {
+        students: {
+          some: {
+            parentId: currentUserId!,
+          },
+        },
+      };
+      break;
+
+    default:
+      break;
   }
 
   const [data, count] = await prisma.$transaction([

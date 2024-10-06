@@ -1,5 +1,4 @@
 import React from 'react'
-import { role, assignmentsData } from '@/lib/data';
 import TableSearch from '@/components/TableSearch'
 import { VscSettings } from "react-icons/vsc";
 import { FaSortAmountDown } from "react-icons/fa";
@@ -10,6 +9,7 @@ import FormModal from '@/components/FormModal';
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Assignment, Class, Prisma, Subject, Teacher } from "@prisma/client";
+import { role, currentUserId } from '@/lib/utils';
 
 type AssignmentList = Assignment & {
   lesson: {
@@ -18,6 +18,7 @@ type AssignmentList = Assignment & {
     teacher: Teacher;
   };
 };
+
 
 const columns = [
   {
@@ -38,10 +39,14 @@ const columns = [
     accessor: 'dueDate',
     className: "hidden md:table-cell",
   },
-  {
-    header: "Actions",
-    accessor: "action",
-  },
+  ...(role === "admin" || role === "teacher"
+    ? [
+        {
+          header: "Actions",
+          accessor: "action",
+        },
+      ]
+    : []),
 ]
 
 export default async function AssignmentListPage({
@@ -74,6 +79,8 @@ export default async function AssignmentListPage({
   const p = page ? parseInt(page) : 1;
   const query: Prisma.AssignmentWhereInput = {};
 
+  query.lesson = {};
+
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
       if (value !== undefined) {
@@ -94,6 +101,34 @@ export default async function AssignmentListPage({
         }
       }
     }
+  }
+
+  switch (role) {
+    case "admin":
+      break;
+    case "teacher":
+      query.lesson.teacherId = currentUserId!;
+      break;
+    case "student":
+      query.lesson.class = {
+        students: {
+          some: {
+            id: currentUserId!,
+          },
+        },
+      };
+      break;
+    case "parent":
+      query.lesson.class = {
+        students: {
+          some: {
+            parentId: currentUserId!,
+          },
+        },
+      };
+      break;
+    default:
+      break;
   }
 
   const [data, count] = await prisma.$transaction([

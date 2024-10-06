@@ -1,5 +1,5 @@
 import React from 'react'
-import { role } from '@/lib/data';
+import { role } from '@/lib/utils';
 import TableSearch from '@/components/TableSearch'
 import { VscSettings } from "react-icons/vsc";
 import { FaSortAmountDown } from "react-icons/fa";
@@ -29,10 +29,14 @@ const columns = [
     accessor: 'teacher',
     className: "hidden md:table-cell",
   },
-  {
-    header: "Actions", 
-    accessor: 'actions', 
-  },
+  ...(role === "admin"
+    ? [
+        {
+          header: "Actions",
+          accessor: "action",
+        },
+      ]
+    : []),
 ]
 
 export default async function LessonListPage({

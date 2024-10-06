@@ -1,7 +1,6 @@
-'use client'
 import React from 'react'
+import { currentUser } from "@clerk/nextjs/server";
 import Link from 'next/link'
-import { role } from '../lib/data'
 
 import { 
   HiHome, 
@@ -138,7 +137,9 @@ const menuItems = [
 ]
 
 
-export default function Navigation() {
+export default async function Navigation() {
+  const user = await currentUser();
+  const role = user?.publicMetadata.role as string;
   return (
     <nav className='mt-4 text-sm'>
       {menuItems.map((menu, index) => (

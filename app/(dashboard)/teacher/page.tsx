@@ -1,8 +1,10 @@
 import React from 'react'
+import { auth } from "@clerk/nextjs/server";
 import Announcement from '@/components/Announcement'
-import BigCalendar from '@/components/BigCalendar'
+import BigCalendarContainer from '@/components/BigCalendarContainer'
 
 export default function TeacherPage() {
+  const { userId } = auth();
   return (
     <div className='flex flex-1 flex-col xl:flex-row gap-4 p-4'>
       <div className="w-full xl:w-2/3">
@@ -10,7 +12,7 @@ export default function TeacherPage() {
           <header>
             <h2 className='text-xl font-semibold'>Schedule</h2>
           </header>
-          <BigCalendar />
+          <BigCalendarContainer type="teacherId" id={userId!} />
         </div>
       </div>
       <aside className='grid self-start gap-8 w-full xl:w-1/3'>
